@@ -2,7 +2,7 @@ import AjustesContainer from "../components/AjustesContainer";
 import Footer from "../components/Footer";
 import ButtonOrange from "../components/ButtonOrange";
 import Parametros from "../components/Parametros";
-import "./Pages.css";
+import "./pages.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { createMatch } from "../api/MatchAPI";

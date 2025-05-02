@@ -4,7 +4,7 @@ import GoBackButtonMain from "../components/MainPage/GoBackButtonMain";
 import CustomButton from "../components/CustomButtonT4";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import "./Pages.css";
+import "./pages.css";
 import { accederConCodigo } from "../api/logincodigoAPI";
 
 const LoginCodigo = () => {

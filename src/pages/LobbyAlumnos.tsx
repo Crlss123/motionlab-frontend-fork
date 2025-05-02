@@ -5,7 +5,7 @@ import IconWithText from "../components/IconWithText";
 import { FaUser, FaUsers } from "react-icons/fa";
 import { getLobbyTeams } from "../api/lobbyAPI";
 import { getMatchStatus } from "../api/MatchAPI";
-import "./Pages.css";
+import "./pages.css";
 
 interface Equipo {
   nombre: string;

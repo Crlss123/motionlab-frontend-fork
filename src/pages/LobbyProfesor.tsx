@@ -7,7 +7,7 @@ import CustomButton from "../components/ButtonOrange";
 import { getLobbyTeams, deleteTeamFromLobby } from "../api/lobbyAPI";
 import { changeMatchStatus, getMatchStatus } from "../api/MatchAPI";
 import { createRound } from "../api/rondaAPI";
-import "./Pages.css";
+import "./pages.css";
 
 interface Equipo {
   nombre: string;

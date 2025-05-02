@@ -4,7 +4,7 @@ import EquipoControl from "../components/EquipoControl";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../components/CustomButtonT4";
-import "./Pages.css";
+import "./pages.css";
 
 const AjusteEquipos = () => {
   const [equipos, setEquipos] = useState(6);
