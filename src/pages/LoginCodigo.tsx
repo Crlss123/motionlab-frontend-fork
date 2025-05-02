@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import FormContainer from '../components/FormContainer';
-import GoBackButtonMain from '../components/MainPage/GoBackButtonMain';
-import CustomButton from '../components/CustomButtonT4';
-import Footer from '../components/Footer';
-import { useNavigate } from 'react-router-dom';
-import '../pages/Pages.css';
-import { accederConCodigo } from '../api/logincodigoAPI';
+import { useState } from "react";
+import FormContainer from "../components/FormContainer";
+import GoBackButtonMain from "../components/MainPage/GoBackButtonMain";
+import CustomButton from "../components/CustomButtonT4";
+import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+import "./Pages.css";
+import { accederConCodigo } from "../api/logincodigoAPI";
 
 const LoginCodigo = () => {
-  const [codigo, setCodigo] = useState('');
+  const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     const regex = /^[a-zA-Z0-9]{8}$/;
 
     if (!regex.test(codigo)) {
-      alert('El código debe tener exactamente 8 caracteres alfanuméricos.');
+      alert("El código debe tener exactamente 8 caracteres alfanuméricos.");
       return;
     }
 
     const result = await accederConCodigo(codigo);
 
     if (result.success) {
-      console.log('Código válido y equipo creado:', result);
-      navigate('/login', { state: { codigo } });
+      console.log("Código válido y equipo creado:", result);
+      navigate("/login", { state: { codigo } });
     } else {
       alert(result.error);
     }
@@ -39,8 +39,8 @@ const LoginCodigo = () => {
               <label
                 className="form-label fw-bold mb-3 fs-5"
                 style={{
-                  color: '#032B6F',
-                  fontFamily: '"Inter", sans-serif'
+                  color: "#032B6F",
+                  fontFamily: '"Inter", sans-serif',
                 }}
               >
                 Código
@@ -51,16 +51,16 @@ const LoginCodigo = () => {
                 value={codigo}
                 onChange={(e) => setCodigo(e.target.value)}
                 style={{
-                  backgroundColor: '#f2f2f2',
-                  border: 'none',
-                  borderRadius: '10px',
-                  padding: '0.75rem',
-                  fontSize: '1.1rem',
-                  boxShadow: 'none',
-                  outline: 'none',
-                  width: '19%',
-                  margin: '0 auto',
-                  textAlign: 'center'
+                  backgroundColor: "#f2f2f2",
+                  border: "none",
+                  borderRadius: "10px",
+                  padding: "0.75rem",
+                  fontSize: "1.1rem",
+                  boxShadow: "none",
+                  outline: "none",
+                  width: "19%",
+                  margin: "0 auto",
+                  textAlign: "center",
                 }}
               />
               <CustomButton label="ACCEDER" onClick={handleSubmit} />

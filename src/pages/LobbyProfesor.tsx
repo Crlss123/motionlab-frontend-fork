@@ -7,7 +7,7 @@ import CustomButton from "../components/ButtonOrange";
 import { getLobbyTeams, deleteTeamFromLobby } from "../api/lobbyAPI";
 import { changeMatchStatus, getMatchStatus } from "../api/MatchAPI";
 import { createRound } from "../api/rondaAPI";
-import "../pages/Pages.css";
+import "./Pages.css";
 
 interface Equipo {
   nombre: string;
@@ -133,7 +133,8 @@ const LobbyProfesor = () => {
             <div className="icon-button-style">
               <button
                 onClick={() => window.open("/estadisticas", "_blank")}
-                className="stats">
+                className="stats"
+              >
                 <IoIosStats size={50} color="white" />
               </button>
             </div>

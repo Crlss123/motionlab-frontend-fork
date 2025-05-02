@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import ButtonRegresar from '../components/ButtonRegresar';
-import '../components/Ajustes.css';
+import { useNavigate } from "react-router-dom";
+import ButtonRegresar from "./ButtonRegresar";
+import "./Ajustes.css";
 
 interface Props {
   label: string;
@@ -20,7 +20,7 @@ const AjustesContainer = ({ label, children, pag_anterior }: Props) => {
       <div className="ajustes-box shadow-lg p-4">
         <div>
           <div className="btn-reg" onClick={handleRegresar}>
-            < ButtonRegresar label='< Regresar' />
+            <ButtonRegresar label="< Regresar" />
           </div>
 
           <div className="ajustes-label position-absolute start-50 translate-middle-x">
