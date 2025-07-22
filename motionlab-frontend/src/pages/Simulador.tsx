@@ -25,6 +25,8 @@ import { useNavigate } from "react-router-dom";
 import Leaderboard from '../components/Leaderboard';
 import SimLogoutButton from "../components/Simulador/SimLogoutButton";
 import { FaUsers } from "react-icons/fa";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
 
 
 type MovementData = {
@@ -32,6 +34,8 @@ type MovementData = {
     x: number; // Posición X del carro
     y: number; // Posición Y del carro
     velocity: number; // Velocidad del carro
+    acceleration: number; // Aceleración del carro
+    force: number; // Fuerza total aplicada al carro
     isRampBaseReached: boolean; // Si se ha alcanzado la base de la rampa
     isRampTopReached: boolean; // Si se ha alcanzado la cima de la rampa
     isGoalOneCompleted: boolean; // Si se ha completado el primer objetivo
@@ -41,6 +45,8 @@ type MovementData = {
     progressPercent: number;
     failedToClimbHill: boolean; // Porcentaje de progreso en el recorrido total
 };
+
+
 const Simulador = () => {
     const navigate = useNavigate();
     // Parametros del profesor
@@ -52,6 +58,11 @@ const Simulador = () => {
     const [chassisMass, setChassisMass] = useState<number>(50);
     const [additionalMass, setAdditionalMass] = useState<number>(10);
     const [motorPower, setMotorPower] = useState<number>(8);
+    // Graficos
+    type ChartType = 'velocity' | 'acceleration' | 'force';
+    const [activeChart, setActiveChart] = useState<ChartType | null>(null);
+    const [chartData, setChartData] = useState<MovementData[]>([]);
+
     // Inputs
     const [pilotMassInput, setPilotMassInput] = useState<string>("70");
     const [chassisMassInput, setChassisMassInput] = useState<string>("50");
@@ -115,6 +126,24 @@ const Simulador = () => {
     const distanceRef = useRef<number>(0);
     const simulationTimerRef = useRef<number | null>(null);
     const movementDataRef = useRef<MovementData[]>([]);
+
+    const getCurrentFrameData = () => {
+        const movementData = movementDataRef.current;
+        if (!movementData || movementData.length === 0) return null;
+
+        const currentTime = time;
+        let currentFrameIndex = 0;
+
+        // Encontrar el frame más cercano al tiempo actual
+        while (
+            currentFrameIndex < movementData.length - 1 &&
+            movementData[currentFrameIndex + 1].time <= currentTime
+        ) {
+            currentFrameIndex++;
+        }
+
+        return movementData[currentFrameIndex];
+    };
 
     const loadMatchParameters = async () => {
         if (!matchId) return;
@@ -382,6 +411,7 @@ const Simulador = () => {
 
         const response = await getCalcSimulacion(dataToSend);
         movementDataRef.current = response.payload;
+        setChartData(response.payload); // Guarda los datos para las gráficas
 
         if (simulationTimerRef.current) {
             clearInterval(simulationTimerRef.current);
@@ -756,6 +786,8 @@ const Simulador = () => {
             .toString()
             .padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
     };
+
+
     return (
         <div className="simulador-container">
             {showLeaderboard && <Leaderboard onClose={() => setShowLeaderboard(false)} />}
@@ -1145,6 +1177,117 @@ const Simulador = () => {
                             </div>
                         </div>
                     </div>
+
+                    <div className="charts-section">
+                        <p className="charts-title">Gráficas</p>
+                        <div className="charts-container">
+                            <div
+                                className="chart-item"
+                                onClick={() => setActiveChart('velocity')}
+                            >
+                                <span className="chart-label chart-label-velocidad">Velocidad</span>
+                            </div>
+
+                            <div
+                                className="chart-item"
+                                onClick={() => setActiveChart('acceleration')}
+                            >
+                                <span className="chart-label chart-label-aceleracion">Aceleración</span>
+                            </div>
+
+                            <div
+                                className="chart-item"
+                                onClick={() => setActiveChart('force')}
+                            >
+                                <span className="chart-label chart-label-fuerza">Fuerza</span>
+                            </div>
+                        </div>
+
+                        {/* Modal de gráfica expandida */}
+                        {activeChart && (
+                            <div className="chart-modal">
+                                <div className="chart-modal-content">
+                                    <div className="chart-header">
+                                        <h3>
+                                            {activeChart === 'velocity' && 'Velocidad (m/s)'}
+                                            {activeChart === 'acceleration' && 'Aceleración (m/s²)'}
+                                            {activeChart === 'force' && 'Fuerza (N)'}
+                                        </h3>
+                                        <button
+                                            className="close-chart-btn"
+                                            onClick={() => setActiveChart(null)}
+                                        >
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                    <div className="chart-display" style={{ height: '300px' }}>
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <LineChart
+                                                data={chartData}
+                                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                                            >
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis
+                                                    dataKey="time"
+                                                    domain={['dataMin', 'dataMax']}
+                                                    type="number"
+                                                    tickCount={7}
+                                                    tickFormatter={(value) => value.toFixed(1)}
+                                                    allowDataOverflow={false}
+                                                    label={{
+                                                        value: 'Tiempo (s)',
+                                                        position: 'insideBottomRight',
+                                                        offset: -10
+                                                    }}
+                                                />
+                                                <YAxis
+                                                    domain={['auto', 'auto']}
+                                                    allowDataOverflow={false}
+                                                    label={{
+                                                        value: activeChart === 'velocity' ? 'Velocidad (m/s)' :
+                                                            activeChart === 'acceleration' ? 'Aceleración (m/s²)' :
+                                                                'Fuerza (N)',
+                                                        angle: -90,
+                                                        position: 'insideLeft'
+                                                    }}
+                                                />
+                                                <Tooltip
+                                                    formatter={(value) => [`${value} ${activeChart === 'velocity' ? 'm/s' :
+                                                        activeChart === 'acceleration' ? 'm/s²' : 'N'}`, '']}
+                                                    labelFormatter={(time) => `Tiempo: ${time.toFixed(2)}s`}
+                                                />
+                                                <Legend />
+                                                <Line
+                                                    type="monotone"
+                                                    dataKey={activeChart}
+                                                    stroke={
+                                                        activeChart === 'velocity' ? '#547EBC' :
+                                                            activeChart === 'acceleration' ? '#C85332' :
+                                                                '#4CAF50'
+                                                    }
+                                                    dot={false}
+                                                    isAnimationActive={false} // Desactivar animaciones para mejor rendimiento
+                                                    strokeWidth={2}
+                                                />
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div className="current-value-display">
+                                        Valor actual:
+                                        {activeChart === 'velocity' && `${currentVelocity.toFixed(2)} m/s`}
+                                        {activeChart === 'acceleration' && (() => {
+                                            const frameData = getCurrentFrameData();
+                                            return `${frameData ? frameData.acceleration.toFixed(2) : 0} m/s²`;
+                                        })()}
+                                        {activeChart === 'force' && (() => {
+                                            const frameData = getCurrentFrameData();
+                                            return `${frameData ? frameData.force.toFixed(2) : 0} N`;
+                                        })()}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                     <div className="simulation-status">
                         <div className="status-item">
                             <label>Velocidad actual:</label>
@@ -1159,36 +1302,39 @@ const Simulador = () => {
                             <span>{formatTime(time)}</span>
                         </div>
                     </div>
+
                     {statusMessage && (
                         <div className={`status-message ${statusType}`}>
                             {statusMessage}
                         </div>
                     )}
-                    <div
-                        className={`control-buttons ${allStudentsCompleted ? "all-completed" : ""
-                            }`}
-                    >
-                        <button
-                            className="control-btn start-btn"
-                            onClick={startSimulation}
-                            disabled={(isRunning && !isPaused) || allStudentsCompleted}
+                    <div className="control-panel">
+                        <div
+                            className={`control-buttons ${allStudentsCompleted ? "all-completed" : ""
+                                }`}
                         >
-                            START
-                        </button>
-                        <button
-                            className="control-btn pause-btn"
-                            onClick={pauseSimulation}
-                            disabled={!isRunning || isPaused || allStudentsCompleted}
-                        >
-                            <img src="/Pause.svg" alt="" />
-                        </button>
-                        <button
-                            className="control-btn cancel-btn"
-                            onClick={cancelSimulation}
-                            disabled={(!isRunning && !isPaused) || allStudentsCompleted}
-                        >
-                            <FaTimes className="cross" />
-                        </button>
+                            <button
+                                className="control-btn start-btn"
+                                onClick={startSimulation}
+                                disabled={(isRunning && !isPaused) || allStudentsCompleted}
+                            >
+                                START
+                            </button>
+                            <button
+                                className="control-btn pause-btn"
+                                onClick={pauseSimulation}
+                                disabled={!isRunning || isPaused || allStudentsCompleted}
+                            >
+                                <img src="/Pause.svg" alt="" />
+                            </button>
+                            <button
+                                className="control-btn cancel-btn"
+                                onClick={cancelSimulation}
+                                disabled={(!isRunning && !isPaused) || allStudentsCompleted}
+                            >
+                                <FaTimes className="cross" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
