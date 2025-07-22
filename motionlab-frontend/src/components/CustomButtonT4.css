@@ -18,3 +18,14 @@
 .custombutton:hover {
   transform: scale(1.05);
 }
+
+.custombutton.disabled {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+.custombutton.disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}

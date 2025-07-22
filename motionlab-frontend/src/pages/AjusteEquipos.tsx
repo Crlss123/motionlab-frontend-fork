@@ -24,7 +24,7 @@ const AjusteEquipos = () => {
     <>
       <div className="background-container">
         <div className="main-content">
-          <AjustesContainer label="AJUSTE DE EQUIPOS" pag_anterior="/">
+          <AjustesContainer label="AJUSTE DE EQUIPOS" pag_anterior="/modojuego">
 
             <div className="d-flex justify-content-around flex-wrap mt-4">
               <EquipoControl
