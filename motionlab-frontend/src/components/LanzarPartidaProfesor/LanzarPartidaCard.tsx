@@ -10,7 +10,7 @@ const LanzarPartidaCard = ({ nomina }: LanzarPartidaCardProps) => {
   const navigate = useNavigate();
 
   const handleLanzarPartida = () => {
-    navigate('/modojuego', { state: { codigo: 'SIN-CÓDIGO' } });
+    navigate('/ajuste-equipos', { state: { codigo: 'SIN-CÓDIGO' } });
   };
 
   return (

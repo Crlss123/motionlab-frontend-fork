@@ -1002,6 +1002,222 @@ input[type="number"].value-input::-webkit-inner-spin-button {
   border-radius: 4px;
 }
 
+/* Modal principal de gráficas */
+.charts-main-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 1000;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.charts-main-modal-content {
+  background: linear-gradient(135deg, #e8f2ff 0%, #f0f8ff 100%);
+  border-radius: 20px;
+  width: 320px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 3px solid #4a90e2;
+  margin-right: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+/* Header del modal */
+.charts-modal-header {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 17px 17px 0 0;
+}
+
+.charts-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.close-charts-modal-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.close-charts-modal-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Container de todas las gráficas */
+.all-charts-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Preview individual de cada gráfica */
+.chart-preview {
+  background: white;
+  border-radius: 15px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-preview:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Colores específicos para cada tipo de gráfica */
+.chart-preview:nth-child(1) {
+  border-color: #547EBC;
+}
+
+.chart-preview:nth-child(1):hover {
+  border-color: #547EBC;
+  background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
+}
+
+.chart-preview:nth-child(2) {
+  border-color: #C85332;
+}
+
+.chart-preview:nth-child(2):hover {
+  border-color: #C85332;
+  background: linear-gradient(135deg, #fff8f6 0%, #ffede8 100%);
+}
+
+.chart-preview:nth-child(3) {
+  border-color: #4CAF50;
+}
+
+.chart-preview:nth-child(3):hover {
+  border-color: #4CAF50;
+  background: linear-gradient(135deg, #f8fff8 0%, #edfeed 100%);
+}
+
+/* Títulos de las gráficas */
+.chart-preview h4 {
+  margin: 0 0 2px 0;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Colores de fondo para los títulos */
+.chart-preview:nth-child(1) h4 {
+  background: linear-gradient(135deg, #547EBC 0%, #3a5a8a 100%);
+}
+
+.chart-preview:nth-child(2) h4 {
+  background: linear-gradient(135deg, #C85332 0%, #a03d22 100%);
+}
+
+.chart-preview:nth-child(3) h4 {
+  background: linear-gradient(135deg, #4CAF50 0%, #3d8b40 100%);
+}
+
+/* Container del mini chart */
+.mini-chart {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 2px;
+  border: 1px solid #e0e0e0;
+  height: 150px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .charts-main-modal {
+    padding: 10px;
+    justify-content: center;
+  }
+  
+  .charts-main-modal-content {
+    width: 90%;
+    max-width: 350px;
+    margin-right: 0;
+  }
+  
+  .all-charts-container {
+    padding: 15px;
+  }
+  
+  .chart-preview {
+    padding: 12px;
+  }
+}
+
+/* Animación de entrada */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.charts-main-modal-content {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+/* Scrollbar personalizada */
+.all-charts-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.all-charts-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.all-charts-container::-webkit-scrollbar-thumb {
+  background: #4a90e2;
+  border-radius: 3px;
+}
+
+.all-charts-container::-webkit-scrollbar-thumb:hover {
+  background: #357abd;
+}
 @media (max-width: 1200px) {
   .compact-goals-panel {
     right: 280px;

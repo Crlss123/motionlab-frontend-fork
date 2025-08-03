@@ -25,8 +25,9 @@ import { useNavigate } from "react-router-dom";
 import Leaderboard from '../components/Leaderboard';
 import SimLogoutButton from "../components/Simulador/SimLogoutButton";
 import { FaUsers } from "react-icons/fa";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
+import ChartJSComponent from '../components/ChartJSComponent';
+import MiniChartJS from '../components/MiniChartJS';
+export type { MovementData };
 
 
 type MovementData = {
@@ -47,6 +48,7 @@ type MovementData = {
 };
 
 
+
 const Simulador = () => {
     const navigate = useNavigate();
     // Parametros del profesor
@@ -59,9 +61,10 @@ const Simulador = () => {
     const [additionalMass, setAdditionalMass] = useState<number>(10);
     const [motorPower, setMotorPower] = useState<number>(8);
     // Graficos
-    type ChartType = 'velocity' | 'acceleration' | 'force';
+    type ChartType = 'velocity' | 'acceleration' | 'position';
     const [activeChart, setActiveChart] = useState<ChartType | null>(null);
     const [chartData, setChartData] = useState<MovementData[]>([]);
+    const [showChartsModal, setShowChartsModal] = useState(false);
 
     // Inputs
     const [pilotMassInput, setPilotMassInput] = useState<string>("70");
@@ -1181,108 +1184,86 @@ const Simulador = () => {
                     <div className="charts-section">
                         <p className="charts-title">Gráficas</p>
                         <div className="charts-container">
-                            <div
-                                className="chart-item"
-                                onClick={() => setActiveChart('velocity')}
-                            >
-                                <span className="chart-label chart-label-velocidad">Velocidad</span>
-                            </div>
-
-                            <div
-                                className="chart-item"
-                                onClick={() => setActiveChart('acceleration')}
-                            >
-                                <span className="chart-label chart-label-aceleracion">Aceleración</span>
-                            </div>
-
-                            <div
-                                className="chart-item"
-                                onClick={() => setActiveChart('force')}
-                            >
-                                <span className="chart-label chart-label-fuerza">Fuerza</span>
+                            <div className="charts-section">
+                                <button
+                                    className="charts-btn"
+                                    onClick={() => setShowChartsModal(true)}
+                                >
+                                    GRÁFICAS
+                                </button>
                             </div>
                         </div>
 
-                        {/* Modal de gráfica expandida */}
-                        {activeChart && (
+                        {activeChart === 'velocity' && (
                             <div className="chart-modal">
                                 <div className="chart-modal-content">
                                     <div className="chart-header">
-                                        <h3>
-                                            {activeChart === 'velocity' && 'Velocidad (m/s)'}
-                                            {activeChart === 'acceleration' && 'Aceleración (m/s²)'}
-                                            {activeChart === 'force' && 'Fuerza (N)'}
-                                        </h3>
-                                        <button
-                                            className="close-chart-btn"
-                                            onClick={() => setActiveChart(null)}
-                                        >
+                                        <h3>Velocidad (m/s)</h3>
+                                        <button className="close-chart-btn" onClick={() => setActiveChart(null)}>
                                             <FaTimes />
                                         </button>
                                     </div>
                                     <div className="chart-display" style={{ height: '300px' }}>
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <LineChart
-                                                data={chartData}
-                                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                                            >
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis
-                                                    dataKey="time"
-                                                    domain={['dataMin', 'dataMax']}
-                                                    type="number"
-                                                    tickCount={7}
-                                                    tickFormatter={(value) => value.toFixed(1)}
-                                                    allowDataOverflow={false}
-                                                    label={{
-                                                        value: 'Tiempo (s)',
-                                                        position: 'insideBottomRight',
-                                                        offset: -10
-                                                    }}
-                                                />
-                                                <YAxis
-                                                    domain={['auto', 'auto']}
-                                                    allowDataOverflow={false}
-                                                    label={{
-                                                        value: activeChart === 'velocity' ? 'Velocidad (m/s)' :
-                                                            activeChart === 'acceleration' ? 'Aceleración (m/s²)' :
-                                                                'Fuerza (N)',
-                                                        angle: -90,
-                                                        position: 'insideLeft'
-                                                    }}
-                                                />
-                                                <Tooltip
-                                                    formatter={(value) => [`${value} ${activeChart === 'velocity' ? 'm/s' :
-                                                        activeChart === 'acceleration' ? 'm/s²' : 'N'}`, '']}
-                                                    labelFormatter={(time) => `Tiempo: ${time.toFixed(2)}s`}
-                                                />
-                                                <Legend />
-                                                <Line
-                                                    type="monotone"
-                                                    dataKey={activeChart}
-                                                    stroke={
-                                                        activeChart === 'velocity' ? '#547EBC' :
-                                                            activeChart === 'acceleration' ? '#C85332' :
-                                                                '#4CAF50'
-                                                    }
-                                                    dot={false}
-                                                    isAnimationActive={false} // Desactivar animaciones para mejor rendimiento
-                                                    strokeWidth={2}
-                                                />
-                                            </LineChart>
-                                        </ResponsiveContainer>
+                                        <ChartJSComponent
+                                            data={chartData}
+                                            dataKey="velocity"
+                                            color="#547EBC"
+                                            title="Velocidad"
+                                            unit="m/s"
+                                        />
                                     </div>
                                     <div className="current-value-display">
-                                        Valor actual:
-                                        {activeChart === 'velocity' && `${currentVelocity.toFixed(2)} m/s`}
-                                        {activeChart === 'acceleration' && (() => {
-                                            const frameData = getCurrentFrameData();
-                                            return `${frameData ? frameData.acceleration.toFixed(2) : 0} m/s²`;
-                                        })()}
-                                        {activeChart === 'force' && (() => {
-                                            const frameData = getCurrentFrameData();
-                                            return `${frameData ? frameData.force.toFixed(2) : 0} N`;
-                                        })()}
+                                        Velocidad actual: {currentVelocity.toFixed(2)} m/s
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeChart === 'acceleration' && (
+                            <div className="chart-modal">
+                                <div className="chart-modal-content">
+                                    <div className="chart-header">
+                                        <h3>Aceleración (m/s²)</h3>
+                                        <button className="close-chart-btn" onClick={() => setActiveChart(null)}>
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                    <div className="chart-display" style={{ height: '300px' }}>
+                                        <ChartJSComponent
+                                            data={chartData}
+                                            dataKey="acceleration"
+                                            color="#C85332"
+                                            title="Aceleración"
+                                            unit="m/s²"
+                                        />
+                                    </div>
+                                    <div className="current-value-display">
+                                        Aceleración actual: {getCurrentFrameData()?.acceleration.toFixed(2) || '0.00'} m/s²
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeChart === 'position' && (
+                            <div className="chart-modal">
+                                <div className="chart-modal-content">
+                                    <div className="chart-header">
+                                        <h3>Posición (m)</h3>
+                                        <button className="close-chart-btn" onClick={() => setActiveChart(null)}>
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                    <div className="chart-display" style={{ height: '300px' }}>
+                                        <ChartJSComponent
+                                            data={chartData}
+                                            dataKey="x"
+                                            color="#4CAF50"
+                                            title="Posición"
+                                            unit="m"
+                                        />
+                                    </div>
+                                    <div className="current-value-display">
+                                        Posición actual: {carPosition.x.toFixed(2)} px
                                     </div>
                                 </div>
                             </div>
@@ -1351,6 +1332,47 @@ const Simulador = () => {
                     goal3: isGoalThreeCompleted,
                 }}
             />
+
+            {/* Modal principal de gráficas */}
+            {showChartsModal && (
+                <div className="charts-main-modal">
+                    <div className="charts-main-modal-content">
+                        <div className="charts-modal-header">
+                            <h3>Gráficas de Simulación</h3>
+                            <button
+                                className="close-charts-modal-btn"
+                                onClick={() => setShowChartsModal(false)}
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+
+                        <div className="all-charts-container">
+                            <div className="chart-preview" onClick={() => { setShowChartsModal(false); setActiveChart('velocity'); }}>
+                                <h4>Velocidad</h4>
+                                <div className="mini-chart">
+                                    <MiniChartJS data={chartData} dataKey="velocity" color="#547EBC" />
+                                </div>
+                            </div>
+
+                            <div className="chart-preview" onClick={() => { setShowChartsModal(false); setActiveChart('acceleration'); }}>
+                                <h4>Aceleración</h4>
+                                <div className="mini-chart">
+                                    <MiniChartJS data={chartData} dataKey="acceleration" color="#C85332" />
+                                </div>
+                            </div>
+
+                            <div className="chart-preview" onClick={() => { setShowChartsModal(false); setActiveChart('position'); }}>
+                                <h4>Posición</h4>
+                                <div className="mini-chart">
+                                    <MiniChartJS data={chartData} dataKey="x" color="#4CAF50" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
