@@ -1182,16 +1182,13 @@ const Simulador = () => {
                     </div>
 
                     <div className="charts-section">
-                        <p className="charts-title">Gráficas</p>
                         <div className="charts-container">
-                            <div className="charts-section">
-                                <button
-                                    className="charts-btn"
-                                    onClick={() => setShowChartsModal(true)}
-                                >
-                                    GRÁFICAS
-                                </button>
-                            </div>
+                            <button
+                                className="charts-btn"
+                                onClick={() => setShowChartsModal(true)}
+                            >
+                                Ver gráficas
+                            </button>
                         </div>
 
                         {activeChart === 'velocity' && (
@@ -1338,12 +1335,12 @@ const Simulador = () => {
                 <div className="charts-main-modal">
                     <div className="charts-main-modal-content">
                         <div className="charts-modal-header">
-                            <h3>Gráficas de Simulación</h3>
+                            <h3>GRÁFICAS</h3>
                             <button
                                 className="close-charts-modal-btn"
                                 onClick={() => setShowChartsModal(false)}
                             >
-                                <FaTimes />
+                                <img src="/close-btn.svg" alt="" />
                             </button>
                         </div>
 

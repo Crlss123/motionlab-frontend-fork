@@ -1,4 +1,4 @@
-import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto';
 import React, { useRef, useEffect } from 'react';
 import { MovementData } from '../pages/Simulador';
 
