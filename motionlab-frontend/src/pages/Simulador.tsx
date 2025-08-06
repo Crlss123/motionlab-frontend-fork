@@ -37,6 +37,7 @@ type MovementData = {
     velocity: number; // Velocidad del carro
     acceleration: number; // Aceleración del carro
     force: number; // Fuerza total aplicada al carro
+    positionMeters: number; // Posición del carro en metros
     isRampBaseReached: boolean; // Si se ha alcanzado la base de la rampa
     isRampTopReached: boolean; // Si se ha alcanzado la cima de la rampa
     isGoalOneCompleted: boolean; // Si se ha completado el primer objetivo
@@ -1209,9 +1210,9 @@ const Simulador = () => {
                                             unit="m/s"
                                         />
                                     </div>
-                                    <div className="current-value-display">
+                                    {/* <div className="current-value-display">
                                         Velocidad actual: {currentVelocity.toFixed(2)} m/s
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         )}
@@ -1234,9 +1235,9 @@ const Simulador = () => {
                                             unit="m/s²"
                                         />
                                     </div>
-                                    <div className="current-value-display">
+                                    {/* <div className="current-value-display">
                                         Aceleración actual: {getCurrentFrameData()?.acceleration.toFixed(2) || '0.00'} m/s²
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         )}
@@ -1253,15 +1254,15 @@ const Simulador = () => {
                                     <div className="chart-display" style={{ height: '300px' }}>
                                         <ChartJSComponent
                                             data={chartData}
-                                            dataKey="x"
+                                            dataKey="positionMeters"
                                             color="#4CAF50"
                                             title="Posición"
                                             unit="m"
                                         />
                                     </div>
-                                    <div className="current-value-display">
-                                        Posición actual: {carPosition.x.toFixed(2)} px
-                                    </div>
+                                    {/* <div className="current-value-display">
+                                        Posición actual: {getCurrentFrameData()?.positionMeters.toFixed(2) || '0.00'} m
+                                    </div> */}
                                 </div>
                             </div>
                         )}
@@ -1362,7 +1363,7 @@ const Simulador = () => {
                             <div className="chart-preview" onClick={() => { setShowChartsModal(false); setActiveChart('position'); }}>
                                 <h4>Posición</h4>
                                 <div className="mini-chart">
-                                    <MiniChartJS data={chartData} dataKey="x" color="#4CAF50" />
+                                    <MiniChartJS data={chartData} dataKey="positionMeters" color="#4CAF50" />
                                 </div>
                             </div>
                         </div>
