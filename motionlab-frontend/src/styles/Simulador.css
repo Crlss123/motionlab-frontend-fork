@@ -559,7 +559,7 @@ input[type="range"]:disabled~.slider-container::after {
   background-color: #547EBC;
   border-radius: 20px;
   width: 271px;
-  height: 106px;
+  height: 80px;
   padding: 9px 16px;
   margin: 12px 12px 12px 12px;
   color: white;

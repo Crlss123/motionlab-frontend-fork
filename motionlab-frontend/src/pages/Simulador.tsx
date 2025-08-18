@@ -1276,10 +1276,10 @@ const Simulador = () => {
                             <label>Distancia recorrida:</label>
                             <span>{distanceTraveled.toFixed(2)} m</span>
                         </div>
-                        <div className="status-item mb-0">
+                        {/* <div className="status-item mb-0">
                             <label>Tiempo transcurrido:</label>
                             <span>{formatTime(time)}</span>
-                        </div>
+                        </div> */}
                     </div>
 
                     {statusMessage && (
