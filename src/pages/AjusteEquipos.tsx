@@ -1,10 +1,10 @@
-import { useState } from "react";
-import AjustesContainer from "../components/AjustesContainer";
-import EquipoControl from "../components/EquipoControl";
-import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
-import CustomButton from "../components/CustomButtonT4";
-import "./pages.css";
+import { useState } from 'react';
+import AjustesContainer from '../components/AjustesContainer';
+import EquipoControl from '../components/EquipoControl';
+import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
+import CustomButton from '../components/CustomButtonT4';
+import '../pages/Pages.css';
 
 const AjusteEquipos = () => {
   const [equipos, setEquipos] = useState(6);
@@ -13,25 +13,19 @@ const AjusteEquipos = () => {
   const navigate = useNavigate();
 
   const handleSiguiente = () => {
-    sessionStorage.setItem("equipos", equipos.toString());
-    sessionStorage.setItem("integrantes", integrantes.toString());
-    sessionStorage.setItem("rondas", rondas.toString());
-    console.log(
-      "Equipos:",
-      equipos,
-      "Integrantes:",
-      integrantes,
-      "Rondas:",
-      rondas
-    );
-    navigate("/parametros");
+    sessionStorage.setItem('equipos', equipos.toString());
+    sessionStorage.setItem('integrantes', integrantes.toString());
+    sessionStorage.setItem('rondas', rondas.toString());
+    console.log('Equipos:', equipos, 'Integrantes:', integrantes, 'Rondas:', rondas);
+    navigate('/parametros');
   };
 
   return (
     <>
       <div className="background-container">
         <div className="main-content">
-          <AjustesContainer label="AJUSTE DE EQUIPOS" pag_anterior="/">
+          <AjustesContainer label="AJUSTE DE EQUIPOS" pag_anterior="/modojuego">
+
             <div className="d-flex justify-content-around flex-wrap mt-4">
               <EquipoControl
                 label={
@@ -40,8 +34,8 @@ const AjusteEquipos = () => {
                   </>
                 }
                 value={equipos}
-                onIncrement={() => setEquipos((e) => Math.min(8, e + 1))}
-                onDecrement={() => setEquipos((e) => Math.max(1, e - 1))}
+                onIncrement={() => setEquipos(e => Math.min(8, e + 1))}
+                onDecrement={() => setEquipos(e => Math.max(1, e - 1))}
               />
               <EquipoControl
                 label={
@@ -50,8 +44,8 @@ const AjusteEquipos = () => {
                   </>
                 }
                 value={rondas}
-                onIncrement={() => setRondas((r) => Math.min(5, r + 1))}
-                onDecrement={() => setRondas((r) => Math.max(2, r - 1))}
+                onIncrement={() => setRondas(r => Math.min(5, r + 1))}
+                onDecrement={() => setRondas(r => Math.max(2, r - 1))}
               />
               <EquipoControl
                 label={
@@ -60,15 +54,18 @@ const AjusteEquipos = () => {
                   </>
                 }
                 value={integrantes}
-                onIncrement={() => setIntegrantes((i) => Math.min(5, i + 1))}
-                onDecrement={() => setIntegrantes((i) => Math.max(1, i - 1))}
+                onIncrement={() => setIntegrantes(i => Math.min(5, i + 1))}
+                onDecrement={() => setIntegrantes(i => Math.max(1, i - 1))}
               />
+
             </div>
 
             <div className="text-center mt-5">
               <CustomButton label="SIGUIENTE >" onClick={handleSiguiente} />
             </div>
+
           </AjustesContainer>
+
         </div>
         <Footer />
       </div>
@@ -77,3 +74,4 @@ const AjusteEquipos = () => {
 };
 
 export default AjusteEquipos;
+

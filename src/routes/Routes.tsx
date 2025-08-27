@@ -14,6 +14,7 @@ import Main from "../pages/MainPage";
 import LanzarPartidaProfesor from "../pages/LanzarPartidaProfesor";
 import Landing from "../pages/LandingPage";
 import Statistics from "../pages/estadisticas";
+import ModoJuego from "../pages/ModoJuego";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,11 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginAlumnos />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/modojuego",
+        element: <ModoJuego />,
         errorElement: <ErrorPage />,
       },
       {

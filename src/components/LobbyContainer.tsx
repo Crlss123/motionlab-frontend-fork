@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import logo from "/Logo.svg";
-import "./Lobby.css";
+import { useNavigate } from 'react-router-dom';
+import logo from '/Logo.svg';
+import '../components/Lobby.css';
 
 interface Props {
   label: string;
@@ -17,16 +17,14 @@ const AjustesContainer = ({ label, children, pag_anterior }: Props) => {
 
   const handleIrAtras = () => {
     sessionStorage.clear();
-    navigate("/");
-  };
+    navigate("/")
+  }
 
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center vh-100">
       <div className="lobby-box shadow-lg p-4">
         <div>
-          <button onClick={handleIrAtras}>
-            <img src={logo} alt="Logo" className="logo" />
-          </button>
+          <button onClick={handleIrAtras}><img src={logo} alt="Logo" className="logo" /></button>
 
           <div className="lobby-label position-absolute start-50 translate-middle-x">
             <div className="codigo">Código</div>

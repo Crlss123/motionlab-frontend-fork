@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import LobbyContainer from "../components/LobbyContainer";
-import IconWithText from "../components/IconWithText";
-import { FaUser, FaUsers } from "react-icons/fa";
-import { getLobbyTeams } from "../api/lobbyAPI";
-import { getMatchStatus } from "../api/MatchAPI";
-import "./pages.css";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import LobbyContainer from '../components/LobbyContainer';
+import IconWithText from '../components/IconWithText';
+import { FaUser, FaUsers } from 'react-icons/fa';
+import { getLobbyTeams } from '../api/lobbyAPI';
+import { getMatchStatus } from '../api/MatchAPI';
+import '../pages/Pages.css';
 
 interface Equipo {
   nombre: string;
@@ -34,8 +34,7 @@ const LobbyAlumnos = () => {
         teamId: team.team_id,
       }));
 
-      const mismosEquipos =
-        JSON.stringify(nuevosEquipos) === JSON.stringify(equipos);
+      const mismosEquipos = JSON.stringify(nuevosEquipos) === JSON.stringify(equipos);
       if (!mismosEquipos) {
         setEquipos(nuevosEquipos);
       }
@@ -73,10 +72,7 @@ const LobbyAlumnos = () => {
   }, []);
 
   const totalEquipos = equipos.length;
-  const totalAlumnos = equipos.reduce(
-    (acc, eq) => acc + eq.matriculas.length,
-    0
-  );
+  const totalAlumnos = equipos.reduce((acc, eq) => acc + eq.matriculas.length, 0);
 
   return (
     <div className="background-container">
@@ -90,18 +86,16 @@ const LobbyAlumnos = () => {
           {loading ? (
             <p className="text-center mt-3">Cargando equipos...</p>
           ) : equipos.length === 0 ? (
-            <p className="text-center mt-4 text-muted">
-              Aún no hay equipos creados
-            </p>
+            <p className="text-center mt-4 text-muted">Aún no hay equipos creados</p>
           ) : (
             <div
               className="equipos-grid-container"
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                justifyItems: "center",
-                gap: "2rem",
-                padding: "0 2rem",
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                justifyItems: 'center',
+                gap: '2rem',
+                padding: '0 2rem'
               }}
             >
               {equipos.map((equipo, index) => (
@@ -110,9 +104,7 @@ const LobbyAlumnos = () => {
                   <div className="integrantes-list">
                     {equipo.matriculas.length > 0 ? (
                       equipo.matriculas.map((mat, idx) => (
-                        <div key={idx} className="integrante-name">
-                          {mat}
-                        </div>
+                        <div key={idx} className="integrante-name">{mat}</div>
                       ))
                     ) : (
                       <p className="text-muted">Sin alumnos</p>
@@ -132,3 +124,4 @@ const LobbyAlumnos = () => {
 };
 
 export default LobbyAlumnos;
+

@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
+
+.modo-juego-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6rem;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.modo-button {
+    background: linear-gradient(135deg, #6B8EC7 0%, #5A7DB5 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+    min-height: 200px;
+    box-shadow: 0 8px 25px rgba(107, 142, 199, 0.3);
+    border: 7px solid #4971B4;
+    position: relative;
+    overflow: hidden;
+}
+
+.modo-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #6B8EC7 0%, #5A7DB5 100%);
+    border-radius: inherit;
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+
+.modo-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(107, 142, 199, 0.5);
+}
+
+.modo-button:hover::before {
+    background: linear-gradient(135deg, #7B9ED7 0%, #6A8DC5 100%);
+}
+
+.modo-button.selected {
+    background: linear-gradient(135deg, #E67E43 0%, #D46A35 100%);
+    border-color: #C55A2A;
+    transform: scale(1.05);
+}
+
+.modo-button.selected::before {
+    background: linear-gradient(135deg, #E67E43 0%, #D46A35 100%);
+}
+
+.modo-button.selected:hover {
+    transform: scale(1.15);
+    box-shadow: 0 12px 35px rgba(230, 126, 67, 0.5);
+}
+
+.modo-icon {
+    width: 200px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.modo-button:hover .modo-icon {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.modo-icon img {
+    width: 140px;
+    height: 140px;
+    filter: brightness(0) invert(1);
+    transition: all 0.3s ease;
+}
+
+.modo-button:hover .modo-icon img {
+    transform: scale(1.1);
+}
+
+.modo-label {
+    font-family: 'Jersey 20';
+    color: white;
+    font-size: 45px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.modo-button:hover .modo-label {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}

@@ -25,6 +25,9 @@ import { useNavigate } from "react-router-dom";
 import Leaderboard from '../components/Leaderboard';
 import SimLogoutButton from "../components/Simulador/SimLogoutButton";
 import { FaUsers } from "react-icons/fa";
+import ChartJSComponent from '../components/ChartJSComponent';
+import MiniChartJS from '../components/MiniChartJS';
+export type { MovementData };
 
 
 type MovementData = {
@@ -32,6 +35,9 @@ type MovementData = {
     x: number; // Posición X del carro
     y: number; // Posición Y del carro
     velocity: number; // Velocidad del carro
+    acceleration: number; // Aceleración del carro
+    force: number; // Fuerza total aplicada al carro
+    positionMeters: number; // Posición del carro en metros
     isRampBaseReached: boolean; // Si se ha alcanzado la base de la rampa
     isRampTopReached: boolean; // Si se ha alcanzado la cima de la rampa
     isGoalOneCompleted: boolean; // Si se ha completado el primer objetivo
@@ -41,6 +47,9 @@ type MovementData = {
     progressPercent: number;
     failedToClimbHill: boolean; // Porcentaje de progreso en el recorrido total
 };
+
+
+
 const Simulador = () => {
     const navigate = useNavigate();
     // Parametros del profesor
@@ -52,6 +61,12 @@ const Simulador = () => {
     const [chassisMass, setChassisMass] = useState<number>(50);
     const [additionalMass, setAdditionalMass] = useState<number>(10);
     const [motorPower, setMotorPower] = useState<number>(8);
+    // Graficos
+    type ChartType = 'velocity' | 'acceleration' | 'position';
+    const [activeChart, setActiveChart] = useState<ChartType | null>(null);
+    const [chartData, setChartData] = useState<MovementData[]>([]);
+    const [showChartsModal, setShowChartsModal] = useState(false);
+
     // Inputs
     const [pilotMassInput, setPilotMassInput] = useState<string>("70");
     const [chassisMassInput, setChassisMassInput] = useState<string>("50");
@@ -115,6 +130,24 @@ const Simulador = () => {
     const distanceRef = useRef<number>(0);
     const simulationTimerRef = useRef<number | null>(null);
     const movementDataRef = useRef<MovementData[]>([]);
+
+    const getCurrentFrameData = () => {
+        const movementData = movementDataRef.current;
+        if (!movementData || movementData.length === 0) return null;
+
+        const currentTime = time;
+        let currentFrameIndex = 0;
+
+        // Encontrar el frame más cercano al tiempo actual
+        while (
+            currentFrameIndex < movementData.length - 1 &&
+            movementData[currentFrameIndex + 1].time <= currentTime
+        ) {
+            currentFrameIndex++;
+        }
+
+        return movementData[currentFrameIndex];
+    };
 
     const loadMatchParameters = async () => {
         if (!matchId) return;
@@ -382,6 +415,7 @@ const Simulador = () => {
 
         const response = await getCalcSimulacion(dataToSend);
         movementDataRef.current = response.payload;
+        setChartData(response.payload); // Guarda los datos para las gráficas
 
         if (simulationTimerRef.current) {
             clearInterval(simulationTimerRef.current);
@@ -756,6 +790,8 @@ const Simulador = () => {
             .toString()
             .padStart(2, "0")}.${milliseconds.toString().padStart(2, "0")}`;
     };
+
+
     return (
         <div className="simulador-container">
             {showLeaderboard && <Leaderboard onClose={() => setShowLeaderboard(false)} />}
@@ -1145,6 +1181,92 @@ const Simulador = () => {
                             </div>
                         </div>
                     </div>
+
+                    <div className="charts-section">
+                        <div className="charts-container">
+                            <button
+                                className="charts-btn"
+                                onClick={() => setShowChartsModal(true)}
+                            >
+                                Ver gráficas
+                            </button>
+                        </div>
+
+                        {activeChart === 'velocity' && (
+                            <div className="chart-modal">
+                                <div className="chart-modal-content">
+                                    <div className="chart-header">
+                                        <h3>Velocidad (m/s)</h3>
+                                        <button className="close-chart-btn" onClick={() => setActiveChart(null)}>
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                    <div className="chart-display" style={{ height: '300px' }}>
+                                        <ChartJSComponent
+                                            data={chartData}
+                                            dataKey="velocity"
+                                            color="#547EBC"
+                                            title="Velocidad"
+                                            unit="m/s"
+                                        />
+                                    </div>
+                                    {/* <div className="current-value-display">
+                                        Velocidad actual: {currentVelocity.toFixed(2)} m/s
+                                    </div> */}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeChart === 'acceleration' && (
+                            <div className="chart-modal">
+                                <div className="chart-modal-content">
+                                    <div className="chart-header">
+                                        <h3>Aceleración (m/s²)</h3>
+                                        <button className="close-chart-btn" onClick={() => setActiveChart(null)}>
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                    <div className="chart-display" style={{ height: '300px' }}>
+                                        <ChartJSComponent
+                                            data={chartData}
+                                            dataKey="acceleration"
+                                            color="#C85332"
+                                            title="Aceleración"
+                                            unit="m/s²"
+                                        />
+                                    </div>
+                                    {/* <div className="current-value-display">
+                                        Aceleración actual: {getCurrentFrameData()?.acceleration.toFixed(2) || '0.00'} m/s²
+                                    </div> */}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeChart === 'position' && (
+                            <div className="chart-modal">
+                                <div className="chart-modal-content">
+                                    <div className="chart-header">
+                                        <h3>Posición (m)</h3>
+                                        <button className="close-chart-btn" onClick={() => setActiveChart(null)}>
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                    <div className="chart-display" style={{ height: '300px' }}>
+                                        <ChartJSComponent
+                                            data={chartData}
+                                            dataKey="positionMeters"
+                                            color="#4CAF50"
+                                            title="Posición"
+                                            unit="m"
+                                        />
+                                    </div>
+                                    {/* <div className="current-value-display">
+                                        Posición actual: {getCurrentFrameData()?.positionMeters.toFixed(2) || '0.00'} m
+                                    </div> */}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                     <div className="simulation-status">
                         <div className="status-item">
                             <label>Velocidad actual:</label>
@@ -1154,41 +1276,44 @@ const Simulador = () => {
                             <label>Distancia recorrida:</label>
                             <span>{distanceTraveled.toFixed(2)} m</span>
                         </div>
-                        <div className="status-item mb-0">
+                        {/* <div className="status-item mb-0">
                             <label>Tiempo transcurrido:</label>
                             <span>{formatTime(time)}</span>
-                        </div>
+                        </div> */}
                     </div>
+
                     {statusMessage && (
                         <div className={`status-message ${statusType}`}>
                             {statusMessage}
                         </div>
                     )}
-                    <div
-                        className={`control-buttons ${allStudentsCompleted ? "all-completed" : ""
-                            }`}
-                    >
-                        <button
-                            className="control-btn start-btn"
-                            onClick={startSimulation}
-                            disabled={(isRunning && !isPaused) || allStudentsCompleted}
+                    <div className="control-panel">
+                        <div
+                            className={`control-buttons ${allStudentsCompleted ? "all-completed" : ""
+                                }`}
                         >
-                            START
-                        </button>
-                        <button
-                            className="control-btn pause-btn"
-                            onClick={pauseSimulation}
-                            disabled={!isRunning || isPaused || allStudentsCompleted}
-                        >
-                            <img src="/Pause.svg" alt="" />
-                        </button>
-                        <button
-                            className="control-btn cancel-btn"
-                            onClick={cancelSimulation}
-                            disabled={(!isRunning && !isPaused) || allStudentsCompleted}
-                        >
-                            <FaTimes className="cross" />
-                        </button>
+                            <button
+                                className="control-btn start-btn"
+                                onClick={startSimulation}
+                                disabled={(isRunning && !isPaused) || allStudentsCompleted}
+                            >
+                                START
+                            </button>
+                            <button
+                                className="control-btn pause-btn"
+                                onClick={pauseSimulation}
+                                disabled={!isRunning || isPaused || allStudentsCompleted}
+                            >
+                                <img src="/Pause.svg" alt="" />
+                            </button>
+                            <button
+                                className="control-btn cancel-btn"
+                                onClick={cancelSimulation}
+                                disabled={(!isRunning && !isPaused) || allStudentsCompleted}
+                            >
+                                <FaTimes className="cross" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1205,6 +1330,47 @@ const Simulador = () => {
                     goal3: isGoalThreeCompleted,
                 }}
             />
+
+            {/* Modal principal de gráficas */}
+            {showChartsModal && (
+                <div className="charts-main-modal">
+                    <div className="charts-main-modal-content">
+                        <div className="charts-modal-header">
+                            <h3>GRÁFICAS</h3>
+                            <button
+                                className="close-charts-modal-btn"
+                                onClick={() => setShowChartsModal(false)}
+                            >
+                                <img src="/close-btn.svg" alt="" />
+                            </button>
+                        </div>
+
+                        <div className="all-charts-container">
+                            <div className="chart-preview" onClick={() => { setShowChartsModal(false); setActiveChart('velocity'); }}>
+                                <h4>Velocidad</h4>
+                                <div className="mini-chart">
+                                    <MiniChartJS data={chartData} dataKey="velocity" color="#547EBC" />
+                                </div>
+                            </div>
+
+                            <div className="chart-preview" onClick={() => { setShowChartsModal(false); setActiveChart('acceleration'); }}>
+                                <h4>Aceleración</h4>
+                                <div className="mini-chart">
+                                    <MiniChartJS data={chartData} dataKey="acceleration" color="#C85332" />
+                                </div>
+                            </div>
+
+                            <div className="chart-preview" onClick={() => { setShowChartsModal(false); setActiveChart('position'); }}>
+                                <h4>Posición</h4>
+                                <div className="mini-chart">
+                                    <MiniChartJS data={chartData} dataKey="positionMeters" color="#4CAF50" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

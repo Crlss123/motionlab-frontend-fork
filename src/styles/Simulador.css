@@ -390,13 +390,13 @@ body {
 }
 
 .parameter-group {
-  margin: 8px 12px;
+  margin: 0px 12px;
 }
 
 .parameter {
   background-color: white;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 6px;
+  padding: 4px;
   margin-bottom: 8px;
   font-family: "Inter", sans-serif;
   font-weight: bold;
@@ -441,7 +441,6 @@ body {
 
 
 .user-params {
-  flex: 1;
   overflow-y: auto;
   padding-right: 5px;
   font-family: "Inter", sans-serif;
@@ -560,9 +559,9 @@ input[type="range"]:disabled~.slider-container::after {
   background-color: #547EBC;
   border-radius: 20px;
   width: 271px;
-  height: 106px;
+  height: 80px;
   padding: 9px 16px;
-  margin: 12px;
+  margin: 12px 12px 12px 12px;
   color: white;
   font-family: "Inter", sans-serif;
   font-weight: 700;
@@ -586,7 +585,21 @@ input[type="range"]:disabled~.slider-container::after {
   background-color: #547EBC;
   height: 80px;
   padding: 0 12px;
-  margin-top: 12px;
+  margin-top: 0px;
+  gap: 25px;
+
+}
+
+.control-panel {
+  position: fixed;
+  bottom: 0;
+  width: 300px;
+}
+
+.espaciador {
+  height: 10px;
+  /* Mismo alto que .control-buttons */
+  visibility: hidden;
 }
 
 .control-btn {
@@ -742,7 +755,7 @@ input[type="range"]:disabled~.slider-container::after {
 }
 
 .status-message {
-  margin: 12px;
+  margin: 10px;
   padding: 8px;
   border-radius: 5px;
   font-size: 12px;
@@ -769,7 +782,7 @@ input[type="range"]:disabled~.slider-container::after {
 }
 
 .simulation-status {
-  margin-bottom: 0;
+  margin-bottom: 0px;
 }
 
 .mb-0 {
@@ -821,6 +834,355 @@ input[type="number"].value-input::-webkit-inner-spin-button {
   opacity: 0.6;
   cursor: not-allowed;
 
+}
+
+
+
+
+/* Graficos */
+
+.charts-container {
+  margin: 15px 0px 5px 0px;
+  text-align: center;
+}
+
+.charts-btn {
+  width: 271px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 15px;
+  border: 2px solid #547EBC;
+  background: #FFF;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  color: #547EBC;
+  font-size: 25px;
+}
+
+.charts-btn:hover {
+  border-radius: 15px;
+  border: 2px solid #032B6F;
+  background: #547EBC;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.chart-modal {
+  position: absolute;
+  top: -200px;
+  right: 27px;
+  width: 250px;
+  height: 180px;
+  background: white;
+  border: 2px solid #547EBC;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.chart-modal-content {
+  padding: 15px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header h3 {
+  margin: 0 0 10px 0;
+  color: #547EBC;
+  font-size: 16px;
+}
+
+.chart-display {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-placeholder {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chart-line-large {
+  width: 80%;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.chart-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* En tu archivo Simulador.css */
+.chart-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.chart-modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: auto;
+  position: relative;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.close-chart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.current-value-display {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+/* Modal principal de gráficas */
+.charts-main-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.charts-main-modal-content {
+  background: linear-gradient(135deg, #e8f2ff 0%, #f0f8ff 100%);
+  border-radius: 20px;
+  width: 282px;
+  height: 671px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 3px solid #4a90e2;
+  margin-right: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+/* Header del modal */
+.charts-modal-header {
+  background: #547EBC;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 17px 17px 0 0;
+}
+
+.charts-modal-header h3 {
+  margin: 0;
+  color: white !important;
+  font-family: "Roboto Condensed";
+  font-size: 32px !important;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.close-charts-modal-btn img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-charts-modal-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Container de todas las gráficas */
+.all-charts-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Preview individual de cada gráfica */
+.chart-preview {
+  background: white;
+  border-radius: 15px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-preview:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Colores específicos para cada tipo de gráfica */
+.chart-preview:nth-child(1) {
+  border-color: #547EBC;
+}
+
+.chart-preview:nth-child(1):hover {
+  border-color: #547EBC;
+  background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
+}
+
+.chart-preview:nth-child(2) {
+  border-color: #C85332;
+}
+
+.chart-preview:nth-child(2):hover {
+  border-color: #C85332;
+  background: linear-gradient(135deg, #fff8f6 0%, #ffede8 100%);
+}
+
+.chart-preview:nth-child(3) {
+  border-color: #4CAF50;
+}
+
+.chart-preview:nth-child(3):hover {
+  border-color: #4CAF50;
+  background: linear-gradient(135deg, #f8fff8 0%, #edfeed 100%);
+}
+
+/* Títulos de las gráficas */
+.chart-preview h4 {
+  margin: 0 0 2px 0;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Colores de fondo para los títulos */
+.chart-preview:nth-child(1) h4 {
+  background: linear-gradient(135deg, #547EBC 0%, #3a5a8a 100%);
+}
+
+.chart-preview:nth-child(2) h4 {
+  background: linear-gradient(135deg, #C85332 0%, #a03d22 100%);
+}
+
+.chart-preview:nth-child(3) h4 {
+  background: linear-gradient(135deg, #4CAF50 0%, #3d8b40 100%);
+}
+
+/* Container del mini chart */
+.mini-chart {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 2px;
+  border: 1px solid #e0e0e0;
+  height: 150px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .charts-main-modal {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .charts-main-modal-content {
+    width: 90%;
+    max-width: 350px;
+    margin-right: 0;
+  }
+
+  .all-charts-container {
+    padding: 15px;
+  }
+
+  .chart-preview {
+    padding: 12px;
+  }
+}
+
+/* Animación de entrada */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.charts-main-modal-content {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+/* Scrollbar personalizada */
+.all-charts-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.all-charts-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.all-charts-container::-webkit-scrollbar-thumb {
+  background: #4a90e2;
+  border-radius: 3px;
+}
+
+.all-charts-container::-webkit-scrollbar-thumb:hover {
+  background: #357abd;
 }
 
 @media (max-width: 1200px) {
