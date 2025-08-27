@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import CustomButton from '../components/CustomButtonT4';
 import { setGameMode } from '../api/modojuegoAPI';
-import '../pages/Pages.css';
+import '../pages/pages.css';
 import '../styles/ModoJuego.css';
 
 const ModoJuego = () => {
@@ -27,11 +27,11 @@ const ModoJuego = () => {
     setIsLoading(true);
     try {
       await setGameMode(modoSeleccionado);
-      
-      navigate('/ajuste-equipos', { 
-        state: { 
-          modoJuego: modoSeleccionado 
-        } 
+
+      navigate('/ajuste-equipos', {
+        state: {
+          modoJuego: modoSeleccionado
+        }
       });
     } catch (error) {
       console.error('Error al configurar el modo de juego:', error);
@@ -50,12 +50,12 @@ const ModoJuego = () => {
       <div className="background-container">
         <div className="main-content">
           <AjustesContainer label="MODO DE JUEGO" pag_anterior="/">
-            
+
             {/* Contenedor de los botones de modo */}
             <div className="modo-juego-container">
-              
+
               {/* Botón Constante */}
-              <div 
+              <div
                 className={`modo-button ${modoSeleccionado === 'constante' ? 'selected' : ''}`}
                 onClick={() => handleModoSelection('constante')}
               >
@@ -66,7 +66,7 @@ const ModoJuego = () => {
               </div>
 
               {/* Botón Impulso */}
-              <div 
+              <div
                 className={`modo-button ${modoSeleccionado === 'impulso' ? 'selected' : ''}`}
                 onClick={() => handleModoSelection('impulso')}
               >
@@ -79,8 +79,8 @@ const ModoJuego = () => {
             </div>
 
             <div className="text-center mt-5">
-              <CustomButton 
-                label={isLoading ? "CARGANDO..." : "SIGUIENTE >"} 
+              <CustomButton
+                label={isLoading ? "CARGANDO..." : "SIGUIENTE >"}
                 onClick={handleSiguiente}
                 disabled={isLoading || !modoSeleccionado}
               />

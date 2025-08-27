@@ -5,7 +5,7 @@ import IconWithText from '../components/IconWithText';
 import { FaUser, FaUsers } from 'react-icons/fa';
 import { getLobbyTeams } from '../api/lobbyAPI';
 import { getMatchStatus } from '../api/MatchAPI';
-import '../pages/Pages.css';
+import '../pages/pages.css';
 
 interface Equipo {
   nombre: string;
@@ -124,4 +124,3 @@ const LobbyAlumnos = () => {
 };
 
 export default LobbyAlumnos;
-

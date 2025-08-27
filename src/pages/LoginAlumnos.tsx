@@ -5,7 +5,7 @@ import FormContainer from '../components/FormContainer';
 import Footer from '../components/Footer';
 import CustomButton from '../components/CustomButtonT4';
 import ButtonRegresar from '../components/ButtonRegresar';
-import '../pages/Pages.css';
+import '../pages/pages.css';
 
 const LoginAlumnos = () => {
   const miembros = parseInt(sessionStorage.getItem("members") || "5");
@@ -116,4 +116,3 @@ const LoginAlumnos = () => {
 };
 
 export default LoginAlumnos;
-
